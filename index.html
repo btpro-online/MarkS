@@ -2,11 +2,11 @@
 <html lang="vi"><head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>B&amp;T Pro MarkS</title>
+<title>B&amp;T Pro Mark</title>
 <meta name="theme-color" content="#1c3f94">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="B&amp;T Pro MarkS">
+<meta name="apple-mobile-web-app-title" content="B&amp;T Pro Mark">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
@@ -1548,6 +1548,26 @@ h3.ph {
 .wiz { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; background: var(--warn-soft); color: var(--warn); border-radius: 12px; padding: 10px 12px; margin-bottom: 12px; font-size: 13px; }
 .wiz[hidden] { display: none; }
 .wiz div { display: flex; flex-direction: column; min-width: 0; flex: 1 1 200px; }
+
+/* Nhấn mạnh trang chủ */
+.in-home .top { background: linear-gradient(135deg, #1c3f94, #2f5fd0); color: #fff; margin: -14px calc(-1 * max(16px, env(safe-area-inset-left, 0px))) 0; padding: 14px max(16px, env(safe-area-inset-left, 0px)); border-radius: 0 0 18px 18px; box-shadow: 0 4px 14px rgba(28,63,148,.3); }
+.in-home .top h1 { color: #fff; }
+.home-head { background: var(--ink); color: var(--ink-fg); border-radius: 14px; padding: 14px 16px; margin-top: 14px; }
+.home-head h2 { color: var(--ink-fg); font-size: 21px; }
+.home-head .hint { color: var(--ink-fg); opacity: .85; }
+.hcard { border: 1px solid var(--line); border-left: 6px solid var(--ac, var(--ink)); box-shadow: 0 3px 10px rgba(20,40,100,.12); }
+.hcard.cur { border-color: var(--ac, var(--ink)); box-shadow: 0 0 0 2px var(--ac, var(--ink)), 0 3px 10px rgba(20,40,100,.15); }
+.hc-ico { background: var(--ac, var(--ink)); color: #fff; }
+.hc-t { color: var(--ac-t, var(--ink)); font-size: 17px; }
+.hc-m b { color: var(--ac-t, var(--ink)); }
+.hcard[data-sh='f'] { --ac: #1c3f94; --ac-t: #1c3f94; }
+.hcard[data-sh='m'] { --ac: #0e8a5f; --ac-t: #0b7a53; }
+.hcard[data-sh='s'] { --ac: #d9730d; --ac-t: #b45f08; }
+.hcard[data-sh='e'] { --ac: #7a3fc4; --ac-t: #6a32b0; }
+:root[data-theme='dark'] .hcard[data-sh] { --ac-t: #fff; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme='light']) .hcard[data-sh] { --ac-t: #fff; } }
+.hnew { border-top: 6px solid var(--ink); }
+.hnew h2 { color: var(--ink); font-size: 19px; }
 </style>
 
 <div class="wrap">
@@ -9270,6 +9290,8 @@ function renderPhoto(sheetImg, cfg, marks, o) {
         h +=
           '<div class="hcard' +
           (l.id === lists.active ? ' cur' : '') +
+          '" data-sh="' +
+          t.sheet +
           '" data-open="' +
           l.id +
           '"><div class="hc-top"><span class="hc-ico">' +
