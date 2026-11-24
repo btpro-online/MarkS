@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#1c3f94">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="B&amp;T Pro Mark">
+<meta name="apple-mobile-web-app-title" content="B&amp;T Pro">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
@@ -1568,6 +1568,7 @@ h3.ph {
 @media (prefers-color-scheme: dark) { :root:not([data-theme='light']) .hcard[data-sh] { --ac-t: #fff; } }
 .hnew { border-top: 6px solid var(--ink); }
 .hnew h2 { color: var(--ink); font-size: 19px; }
+.swhint { position: fixed; left: 0; top: 50%; z-index: 90; width: 40px; height: 48px; border-radius: 0 24px 24px 0; background: var(--ink); color: var(--ink-fg); font-size: 28px; line-height: 46px; text-align: center; opacity: 0; pointer-events: none; box-shadow: 0 2px 10px rgba(0,0,0,.3); }
 </style>
 
 <div class="wrap">
@@ -9502,6 +9503,59 @@ function renderPhoto(sheetImg, cfg, marks, o) {
     const i = $('#hnName');
     if (i) i.focus();
   };
+
+  /* Vuốt từ mép trái sang phải để về trang các đợt chấm */
+  (function () {
+    let st = null;
+    const hint = document.createElement('div');
+    hint.className = 'swhint';
+    hint.innerHTML = '‹';
+    document.body.appendChild(hint);
+    const blocked = function () {
+      return (
+        document.body.classList.contains('in-home') ||
+        document.querySelector('.live:not([hidden]), .imgview:not([hidden]), .qrlive:not([hidden])')
+      );
+    };
+    document.addEventListener(
+      'touchstart',
+      function (e) {
+        const t = e.touches[0];
+        st = e.touches.length === 1 && t.clientX <= 28 && !blocked() ? { x: t.clientX, y: t.clientY, on: false } : null;
+      },
+      { passive: true }
+    );
+    document.addEventListener(
+      'touchmove',
+      function (e) {
+        if (!st) return;
+        const t = e.touches[0],
+          dx = t.clientX - st.x,
+          dy = Math.abs(t.clientY - st.y);
+        if (!st.on && dy > 40 && dy > dx) {
+          st = null;
+          hint.style.opacity = 0;
+          return;
+        }
+        if (dx > 8) st.on = true;
+        hint.style.top = t.clientY - 24 + 'px';
+        hint.style.opacity = st.on ? Math.min(1, dx / 90) : 0;
+        hint.style.transform = 'translateX(' + Math.min(dx, 90) * 0.5 + 'px)';
+      },
+      { passive: true }
+    );
+    const end = function (e) {
+      hint.style.opacity = 0;
+      hint.style.transform = '';
+      if (!st) return;
+      const t = (e.changedTouches && e.changedTouches[0]) || null,
+        go = t && st.on && t.clientX - st.x > 80 && Math.abs(t.clientY - st.y) < 70;
+      st = null;
+      if (go) showHome();
+    };
+    document.addEventListener('touchend', end, { passive: true });
+    document.addEventListener('touchcancel', end, { passive: true });
+  })();
 
   /* ---------- Khởi động ---------- */
   renderSheetSel();
