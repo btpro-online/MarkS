@@ -1907,59 +1907,55 @@ const SHEET_E = Object.assign({}, SHEET_F, {
   MAX3: 0
 });
 
-/* ---- Phiếu B&T Pro H (đơn vị = điểm ảnh của ảnh mẫu 1725 x 759): chỉ 4 ô vuông neo ở góc, chiều phiếu nhận
-   bằng các vòng tròn in sẵn. Phần I 12 câu, Phần II 4 câu (2 x 2), Phần III 6 câu. Không có ô tô số báo danh
-   và mã đề: mã đề được đọc từ chữ số in trong ô "Mã đề" (MDBOX). ---- */
+/* ---- Phiếu B&T Pro H (đơn vị = điểm ảnh của ảnh mẫu 1192 x 515): 4 ô vuông neo ở góc, chiều phiếu nhận
+   bằng các vòng tròn in sẵn. Phần I 12 câu, Phần II 4 câu (2 x 2), Phần III 6 câu. Họ tên, lớp và mã đề nằm
+   trong các ô chữ nhật bo góc. Không có ô tô số báo danh và mã đề: mã đề được đọc từ chữ số in trong ô
+   "Mã đề" (MDBOX). ---- */
 const SHEET_H = {
   id: 'h',
   name: 'Phiếu H',
-  PW: 1725,
-  PH: 759,
-  RB: 8.6,
-  K: 6,
-  MS: 26,
-  RR: 10.6,
+  PW: 1192,
+  PH: 515,
+  RB: 6,
+  K: 4.2,
+  MS: 18,
+  RR: 7.4,
   ORIENT: 'rings',
   P1N: 12,
   CORNERS: [
-    [52.5, 83.5],
-    [1663, 83.5],
-    [1663, 702.5],
-    [52.5, 702.5]
+    [30, 46.5],
+    [1161, 46.5],
+    [1161, 481.5],
+    [30, 481.5]
   ],
-  NAME: [112, 46, 692, 68],
+  NAME: [158, 20, 425, 46],
   BAND_Y: [1e9, 1e9, 1e9],
   bands: false,
   SBD_X: [],
   MD_X: [],
   ID_Y: [],
-  MDBOX: [1497, 60, 100, 38],
+  MDBOX: [1037, 21, 70, 44],
   MDN: 4,
-  P1_X: [[104.5, 139.5, 174.5, 209.5]],
-  P1_Y: [245.5, 280.5, 315.5, 350.5, 385.5, 420.5, 455.5, 489.5, 525.5, 559.5, 594.5, 629.5],
+  DIGH: 15,
+  DIGP: 12,
+  P1_X: [[66.5, 91, 115.5, 139.5]],
+  P1_Y: [159.4, 183.9, 208.6, 233.1, 257.6, 282.1, 306.6, 331.1, 355.6, 380.0, 404.6, 429.1],
   P2_X: [
-    [313, 349],
-    [435, 471],
-    [313, 349],
-    [435, 471]
+    [212.5, 237.5],
+    [298.2, 323.2],
+    [212.5, 237.5],
+    [298.2, 323.2]
   ],
   P2_Y: [
-    [279.5, 314.5, 349.5, 384.5],
-    [279.5, 314.5, 349.5, 384.5],
-    [524.5, 559.5, 594.5, 629.5],
-    [524.5, 559.5, 594.5, 629.5]
+    [183.9, 208.6, 233.1, 257.6],
+    [183.9, 208.6, 233.1, 257.6],
+    [355.6, 380.0, 404.6, 429.1],
+    [355.6, 380.0, 404.6, 429.1]
   ],
-  P3_X: [
-    [570.5, 605.5, 640.5, 675.5],
-    [765.5, 800.5, 835.5, 870.5],
-    [960.5, 995.5, 1030.5, 1065.5],
-    [1155.5, 1190.5, 1225.5, 1260],
-    [1348, 1382.5, 1417.5, 1452.5],
-    [1543, 1577.5, 1612.5, 1647.5]
-  ],
-  P3_DASH: 245,
-  P3_COMMA: 279.5,
-  P3_D: [315.5, 350.5, 384.5, 419.5, 454.5, 489.5, 524.5, 559.5, 593.5, 628.5],
+  P3_X: [[393.5, 418.0, 442.5, 467.0], [530.5, 554.5, 579.5, 603.5], [667.0, 691.5, 716.0, 740.5], [804.0, 828.5, 853.0, 877.5], [939.0, 963.5, 988.0, 1012.5], [1076.0, 1100.5, 1125.0, 1149.5]],
+  P3_DASH: 159.4,
+  P3_COMMA: 183.9,
+  P3_D: [208.6, 233.1, 257.6, 282.1, 306.6, 331.1, 355.6, 380.0, 404.6, 429.1],
   MAX1: 12,
   MAX2: 4,
   MAX3: 6
@@ -3458,7 +3454,7 @@ function ocrCode(g, w, h, H) {
   for (let i = 0; i < v.length; i++) ink[i] = v[i] < thr ? 1 : 0;
   const seen = new Uint8Array(rw * rh),
     comps = [],
-    H0 = 25 * SC;
+    H0 = (SHEET.DIGH || 25) * SC;
   for (let s0 = 0; s0 < ink.length; s0++) {
     if (!ink[s0] || seen[s0]) continue;
     const st = [s0],
@@ -3492,7 +3488,7 @@ function ocrCode(g, w, h, H) {
     const bw = x1 - x0 + 1,
       bh = y1 - y0 + 1;
     if (bh < H0 * 0.55 || bh > H0 * 1.35 || bw < 3 * SC) continue;
-    if (bw > 70 * SC) continue;
+    if (bw > (SHEET.DIGP || 16.5) * 4.2 * SC) continue;
     comps.push({ x0: x0, x1: x1, y0: y0, y1: y1, px: px });
   }
   comps.sort(function (p, q) {
@@ -3502,7 +3498,7 @@ function ocrCode(g, w, h, H) {
   const glyphs = [];
   comps.forEach(function (c) {
     const bw = c.x1 - c.x0 + 1,
-      n = Math.max(1, Math.round((bw + 4 * SC) / (16.5 * SC)));
+      n = Math.max(1, Math.round((bw + 4 * SC) / ((SHEET.DIGP || 16.5) * SC)));
     if (n === 1) {
       glyphs.push(c);
       return;
@@ -9633,7 +9629,7 @@ function renderPhoto(sheetImg, cfg, marks, o) {
       return;
     }
     h +=
-      '<div class="home-head"><h2>Các đợt chấm</h2><p class="hint">Mỗi đợt có phiếu, đáp án, danh sách lớp và kết quả riêng. Chạm vào một đợt để mở, hoặc bấm dấu + để tạo đợt mới. Mọi thắc mắc xin liên hệ: Lê Hoài Sơn - Huế - 0914114008</p></div><div class="hlist">';
+      '<div class="home-head"><h2>Các đợt chấm</h2><p class="hint">Mỗi đợt có phiếu, đáp án, danh sách lớp và kết quả riêng. Chạm vào một đợt để mở, hoặc bấm dấu + để tạo đợt mới. Mọi thắc mắc xin liên hệ: Lê Hoài Sơn -  Huế - 0914114008</p></div><div class="hlist">';
     lists.items
       .slice()
       .sort(function (a, b) {
